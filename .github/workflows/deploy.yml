@@ -31,6 +31,15 @@ jobs:
         working-directory: stage/services/python-api
         run: terraform init
 
+      - name: Infracost Cost Estimate
+        uses: infracost/actions/setup@v3
+        with:
+          api-key: ${{ secrets.INFRACOST_API_KEY }}
+
+      - name: Run Infracost
+        working-directory: stage/services/python-api
+        run: infracost breakdown --path .
+
       - name: Terraform apply
         working-directory: stage/services/python-api
         run: terraform apply -auto-approve
