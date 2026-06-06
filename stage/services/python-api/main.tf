@@ -30,6 +30,7 @@ resource "azurerm_container_registry" "acrcontainerapp" {
   resource_group_name = azurerm_resource_group.main.name
   location            = var.location
   sku                 = "Basic"
+  admin_enabled       = true
 }
 
 resource "azurerm_container_app_environment" "cae-containerapp-stage" {
