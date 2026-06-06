@@ -19,8 +19,24 @@ Write-Host "Logged in successfully."
 Write-Host "Setting Azure subscription: $subscriptionId..."
 az account set --subscription $subscriptionId
 
-Write-Host "Registering Microsoft.Storage provider..."
-az provider register --namespace Microsoft.Storage
+# --- Register resource providers ---
+$providers = @("Microsoft.Storage", "Microsoft.App", "Microsoft.ContainerRegistry", "Microsoft.OperationalInsights")
+
+foreach ($provider in $providers) {
+    $providerState = az provider show --namespace $provider --query "registrationState" -o tsv
+    if ($providerState -ne "Registered") {
+        Write-Host "Registering provider: $provider..."
+        az provider register --namespace $provider
+        do {
+            Start-Sleep -Seconds 5
+            $providerState = az provider show --namespace $provider --query "registrationState" -o tsv
+        } while ($providerState -ne "Registered")
+        Write-Host "$provider registered."
+    }
+    else {
+        Write-Host "$provider already registered."
+    }
+}
 
 Write-Host "Creating resource group: $resourceGroupName..."
 az group create --name $resourceGroupName --location $location
