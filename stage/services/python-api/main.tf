@@ -16,7 +16,7 @@ terraform {
 
 provider "azurerm" {
   features {
-    
+
   }
 }
 
@@ -44,13 +44,22 @@ resource "azurerm_container_app" "ca-containerapp-stage" {
   resource_group_name          = azurerm_resource_group.main.name
   container_app_environment_id = azurerm_container_app_environment.cae-containerapp-stage.id
   revision_mode                = "Single"
+  ingress {
+    external_enabled = true
+    target_port      = 5000
+    traffic_weight {
+      latest_revision = true
+      percentage      = 100
+    }
+  }
+
   secret {
     name  = "acr-password"
     value = azurerm_container_registry.acrcontainerapp.admin_password
   }
   registry {
-    server   = azurerm_container_registry.acrcontainerapp.login_server
-    username = azurerm_container_registry.acrcontainerapp.admin_username
+    server               = azurerm_container_registry.acrcontainerapp.login_server
+    username             = azurerm_container_registry.acrcontainerapp.admin_username
     password_secret_name = "acr-password"
   }
   template {
