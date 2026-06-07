@@ -31,10 +31,13 @@ jobs:
         working-directory: stage/services/python-api
         run: terraform init
 
-      - name: Infracost Cost Estimate
+      - name: Infracost cost estimate
         uses: infracost/actions/setup@v3
         with:
           api-key: ${{ secrets.INFRACOST_API_KEY }}
+
+      - name: Set currency
+        run: infracost configure set currency GBP
 
       - name: Run Infracost
         working-directory: stage/services/python-api
