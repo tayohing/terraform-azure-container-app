@@ -41,7 +41,7 @@ jobs:
 
       - name: Run Infracost
         working-directory: stage/services/python-api
-        run: infracost breakdown --path .
+        run: infracost breakdown --path . --format table --show-skipped
 
       - name: Terraform apply
         working-directory: stage/services/python-api
