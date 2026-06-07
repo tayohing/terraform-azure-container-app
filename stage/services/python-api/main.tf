@@ -34,7 +34,7 @@ resource "azurerm_container_registry" "acrcontainerapp" {
 }
 
 resource "azurerm_container_app_environment" "cae-containerapp-stage" {
-  name                = "cae-containerapp-stage"
+  name                = "cae-containerapp-stage1"
   resource_group_name = azurerm_resource_group.main.name
   location            = var.location
 }
